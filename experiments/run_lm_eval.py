@@ -25,7 +25,7 @@ def eval_arg_parser(interactive: bool = True) -> argparse.Namespace:
     parser.add_argument(
         "--model",
         type=str,
-        default="facebook/opt-125m",
+        default="",
         help="Model to load",
     )
     path_group = parser.add_mutually_exclusive_group()
@@ -103,7 +103,7 @@ def calculate_avg_accuracy(task_names: str, results: dict) -> float:
     return (acc_cumul + acc_mmlu_avg) / (n_tasks - len(questions_per_mmlu_task) + 1)
 
 
-def eval_main(args: argparse.Namespace) -> None:
+def eval_main(args: argparse.Namespace, model_path_, tasks_) -> None:
     logging.info("Running SliceGPT LM eval experiment.")
 
     logging.info(f"PyTorch device: {config.device}")
@@ -143,7 +143,6 @@ def eval_main(args: argparse.Namespace) -> None:
 
     ### LM Eval Harness ###
     hflm = HFLM(pretrained=model_adapter.model, tokenizer=tokenizer, batch_size=args.batch_size)
-
     if args.tasks is None:
         task_names = tasks.ALL_TASKS
     else:
@@ -151,7 +150,7 @@ def eval_main(args: argparse.Namespace) -> None:
 
     logging.info(f"Selected Tasks: {task_names}")
 
-    results = lm_eval.simple_evaluate(hflm, tasks=task_names, num_fewshot=args.num_fewshot, batch_size=args.batch_size)[
+    results = lm_eval.simple_evaluate(hflm, tasks=task_names, num_fewshot=args.num_fewshot, batch_size=args.batch_size, write_out=True, log_samples=True, file_name = model_path_.replace('/','_'))[
         'results'
     ]
 
@@ -174,7 +173,6 @@ if __name__ == "__main__":
     logging.addHandler(utils.create_file_handler(log_dir="log"))
 
     os.environ["WANDB__SERVICE_WAIT"] = "300"
-
     eval_args = eval_arg_parser()
     process_eval_args(eval_args)
-    eval_main(eval_args)
+    eval_main(eval_args,model_path_=eval_args.sliced_model_path,tasks_=eval_args.tasks[0])

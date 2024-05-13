@@ -25,7 +25,7 @@ dependencies = [
     "datasets==2.14.7",
     "einops",
     "huggingface-hub==0.20.2",
-    "lm-eval @ git+https://github.com/EleutherAI/lm-evaluation-harness.git@9b0b15b1ccace3534ffbd13298c569869ce8eaf3",
+    "lm-eval @ git+https://github.com/AbhinavDutta/lm-evaluation-harness.git",
     "ml-collections",
     "numpy",
     "sentencepiece",

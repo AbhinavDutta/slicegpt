@@ -247,9 +247,7 @@ class LlamaModelAdapter(ModelAdapter):
         local_files_only: bool = False,
         token: str | bool | None = None,
     ) -> ModelAdapter | None:
-        if not model_name.startswith("meta-llama/Llama-2"):
-            return None
-
+        
         class UninitializedLlamaForCausalLM(LlamaForCausalLM):
             def _init_weights(self, _) -> None:
                 # Prevent weight initialization

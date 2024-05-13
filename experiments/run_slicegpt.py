@@ -20,7 +20,7 @@ def slicing_arg_parser(interactive: bool = True) -> argparse.Namespace:
     parser.add_argument(
         "--model",
         type=str,
-        default="facebook/opt-125m",
+        default="meta-llama/Llama-2-7b",
         help="Model to load",
     )
     path_group = parser.add_mutually_exclusive_group()
@@ -134,7 +134,7 @@ def slicing_main(args: argparse.Namespace) -> None:
         # environment, e.g. notebook, IDE, no-shell process, etc. In this case, we want to continue without wandb.
         logging.info(f'Failed to initialize wandb: {e}, continuing without wandb')
         wandb.init(project=args.wandb_project, mode='disabled')
-
+    breakpoint()
     if args.sliced_model_path:
         # load the model from sliced_model_path to compute perplexity and skip rotation and slicing
         model_adapter, tokenizer = hf_utils.load_sliced_model(

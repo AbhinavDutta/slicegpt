@@ -341,7 +341,6 @@ class ModelAdapter(ABC):
                 candidate = find_recursively(subclass)
                 if candidate is not None:
                     return candidate
-
             if inspect.isabstract(adapter_cls):
                 return None
 
@@ -353,7 +352,6 @@ class ModelAdapter(ABC):
                 local_files_only=local_files_only,
                 token=token,
             )
-
         adapter = find_recursively(cls)
         if adapter is not None:
             return adapter
